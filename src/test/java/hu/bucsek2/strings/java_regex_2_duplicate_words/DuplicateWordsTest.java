@@ -10,7 +10,7 @@ import org.junit.runners.JUnit4;
 public class DuplicateWordsTest extends TestBase {
 
     @Test
-    public void test() {
+    public void test0() {
         String data = "5\n" +
                 "Goodbye bye bye world world world\n" +
                 "Sam went went to to to his business\n" +
@@ -25,10 +25,33 @@ public class DuplicateWordsTest extends TestBase {
                 "Sam went to his business\n" +
                 "Reya is the best player in eye game\n" +
                 "in inthe\n" +
-                "Hello Ab";
+                "Hello Ab\n";
 
         String out = getOut();
 
         Assert.assertEquals(expected, out);
+    }
+
+    @Test
+    public void test1() {
+        String data= "5\n" +
+                "tap taptap For fOr for forfor\n" +
+                "taptap of kirethe the hte hTe hte\n" +
+                "tim tamtim tam tam ta tam tam\n" +
+                "a a a a a a a a a a a a a a a a\n" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        setIn(data);
+        DuplicateWords.main(null);
+
+        String expected = "tap taptap For forfor\n" +
+                "taptap of kirethe the hte\n" +
+                "tim tamtim tam ta tam\n" +
+                "a\n" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
+
+        String out = getOut();
+
+        Assert.assertEquals(expected,out);
     }
 }
