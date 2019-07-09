@@ -1,59 +1,62 @@
 package hu.bucsek2.data_structures.java_1d_array_part2;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 public class Solution {
 
-    public static boolean canWin(int leap, int[] game) {
-        // Return true if you can win the game; otherwise, return false.
-        int i = 0;
+    public static boolean canReachVertex(Map<Integer, Set<Integer>> graph, Integer start, Integer goal) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(start);
 
-        Collection<String> visited = new HashSet<>();
-        while (true) {
-            boolean noMove = true;
+        Set<Integer> visited = new HashSet<>();
 
-            if (i >= game.length) {
-                return true;
-            }
-
-            if (!visited.contains(i + "f")) {
-                visited.add(i + "f");
-                int forward = moveForward(game, i);
-                if (forward != i) {
-                    i = forward;
-                    noMove = true;
-                    continue;
+        while (!queue.isEmpty()) {
+            Integer remove = queue.remove();
+            visited.add(remove);
+            Set<Integer> way = graph.getOrDefault(remove, new HashSet<>());
+            for (int i : way) {
+                if (!visited.contains(i)) {
+                    queue.add(i);
                 }
-            }
-
-            if (!visited.contains(i + "l")) {
-                visited.add(i + "l");
-                int leaped = leap(game, i, leap);
-                if (leaped != i) {
-                    i = leaped;
-                    noMove = true;
-                    continue;
+                if (i == goal) {
+                    return true;
                 }
-            }
-
-            if (!visited.contains(i + "b")) {
-                visited.add(i + "b");
-                int back = moveBack(game, i);
-                if (back != i) {
-                    i = back;
-                    noMove = true;
-                    continue;
-                }
-            }
-
-            if (noMove) {
-                break;
             }
         }
 
         return false;
+    }
+
+    public static Map<Integer, Set<Integer>> createGraph(int leap, int[] game) {
+        Map<Integer, Set<Integer>> result = new HashMap<>();
+
+        for (int i = 0; i < game.length; i++) {
+            registerMove(game, result, i, moveForward(game, i));
+            registerMove(game, result, i, moveBack(game, i));
+            registerMove(game, result, i, leap(game, i, leap));
+        }
+
+        return result;
+    }
+
+    private static void registerMove(int[] game, Map<Integer, Set<Integer>> result, int i, int move) {
+        if (i != move) {
+            if (move > game.length) {
+                move = game.length;
+            }
+            Set<Integer> c = result.getOrDefault(i, new HashSet<>());
+            c.add(move);
+            result.put(i, c);
+        }
+    }
+
+    public static boolean canWin(int leap, int[] game) {
+        // Return true if you can win the game; otherwise, return false.
+        Map<Integer, Set<Integer>> graph = createGraph(leap, game);
+        int start = 0;
+        int goal = game.length;
+
+        return canReachVertex(graph, start, goal);
     }
 
     private static int moveBack(int[] game, int i) {

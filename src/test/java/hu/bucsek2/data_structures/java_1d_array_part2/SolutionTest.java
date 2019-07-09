@@ -1,9 +1,13 @@
 package hu.bucsek2.data_structures.java_1d_array_part2;
 
 import hu.bucsek2.TestBase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.Map;
+import java.util.Set;
 
 @RunWith(JUnit4.class)
 public class SolutionTest extends TestBase {
@@ -44,8 +48,27 @@ public class SolutionTest extends TestBase {
     @Test
     public void test3() {
         String in = readResource("test3.in");
-        String expected = readResource("test3.expected");
+        String expected = readResource("test3.expected") + "\n";
         test(in, expected);
+    }
+
+    @Test
+    public void test3_30() {
+        String in = "1\n" +
+                "61 57\n" +
+                "0 0 1 1 0 0 0 0 0 0 0 0 0 1 0 1 1 1 1 0 1 1 1 0 1 1 1 1 1 0 0 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 1 0 1 0 1 1 0 0 0 1 1 1";
+        String expeced = "YES\n";
+
+        test(in, expeced);
+    }
+
+    @Test
+    public void grapTest() {
+        int[] game = {0, 0, 1, 1, 0, 0, 1, 1, 0, 0};
+        int leap = 3;
+
+        Map<Integer, Set<Integer>> graph = Solution.createGraph(leap, game);
+        Assert.assertTrue(Solution.canReachVertex(graph, 0, 10));
     }
 
     @Override
