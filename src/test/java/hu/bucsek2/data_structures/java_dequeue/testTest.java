@@ -1,89 +1,65 @@
 package hu.bucsek2.data_structures.java_dequeue;
 
+import hu.bucsek2.TestBase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.InputStream;
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Scanner;
-import java.util.function.Function;
 
 @RunWith(JUnit4.class)
-public class testTest {
-    private static final String BASE_PATH = "data_structures/java_dequeue/";
-
-    private static class TestCase {
-        int n, m;
-        int[] array;
-    }
-
-    @Test
-    public void name() {
-        test.UniqueList<Integer> asd = new test.UniqueList<>(Integer.class);
-
-        asd.add(5);
-        asd.add(2);
-        asd.add(6);
-        asd.add(3);
-
-        for (int num : asd.toArray()) {
-            System.out.print(num + ", ");
-        }
-        System.out.println();
+public class testTest extends TestBase {
+    @Override
+    protected Runnable mainRunnable() {
+        return () -> test.main(null);
     }
 
     @Test
     public void test0() {
-        runTest("test0", 3);
+        String in = readResource("test0.in");
+        String expected = "3\n";
+        test(in, expected);
     }
 
     @Test
     public void test1() {
-        runTest("test1", 45);
+        String in = readResource("test1.in");
+        String expected = "45\n";
+        test(in, expected);
+    }
+
+    @Test
+    public void test7() {
+        String in = "10 3\n" +
+                "1 1 1 1 1 1 1 1 1 1";
+        String expected = "1\n";
+        test(in, expected);
     }
 
     @Test
     public void test9() {
-        runTest("test9", 94531);
+        String in = readResource("test9.in");
+        String expected = "94531\n";
+        test(in, expected);
     }
 
-    private void runTest(String path, int expected) {
-        runTest(path, expected, testCase -> test.calcMaxUnique(testCase.m, testCase.array), "base");
-        runTest(path, expected, testCase -> test.calcMaxUnique2(testCase.m, testCase.array), "try2");
+    @Test
+    public void test10() {
+        String in = readResource("test10.in");
+        String expected = "94055\n";
+        test(in, expected);
     }
 
-    private void runTest(String path, Integer expected, Function<TestCase, Integer> testFunction, String functionName) {
+    @Override
+    protected void test(String in, String expected) {
         Instant start = Instant.now();
-        TestCase testCase = readTestCase(path);
-        Assert.assertEquals(expected, testFunction.apply(testCase));
+        super.test(in, expected);
         Instant end = Instant.now();
 
         Duration duration = Duration.between(start, end);
-        System.out.println(path + " - " + functionName + " - " + duration);
-    }
-
-    private TestCase readTestCase(String path) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        InputStream stream = classLoader.getResourceAsStream(BASE_PATH + path);
-        Scanner scanner = new Scanner(stream);
-
-        TestCase testCase = new TestCase();
-
-        testCase.n = scanner.nextInt();
-        testCase.m = scanner.nextInt();
-
-        testCase.array = new int[testCase.n];
-
-        int i = 0;
-        while (scanner.hasNext()) {
-            int number = scanner.nextInt();
-            testCase.array[i++] = number;
-        }
-        scanner.close();
-
-        return testCase;
+        Assert.assertTrue(MessageFormat.format("Too slow! - {0}", duration.toString()), duration.getSeconds() <= 2);
     }
 }
