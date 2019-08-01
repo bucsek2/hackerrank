@@ -11,6 +11,11 @@ public class SolutionTest extends TestBase {
 
     private static final Runnable testRun = () -> Solution.main(null);
 
+    @Override
+    protected Runnable mainRunnable() {
+        return testRun;
+    }
+
     @Test
     public void test0() {
         String in = "4\n" +
